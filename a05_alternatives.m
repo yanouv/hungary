@@ -1,6 +1,6 @@
-%%%%%%%%%%%%
+
 %% Alternative: g3 approximately zero
-%%%%%%%%%%%%
+
 
 %% Housekeeping
 %clearvars
@@ -17,9 +17,9 @@ endfcast   = qq(2025,4);
 fcastrange = startfcast:endfcast;
 
 
-%% ============================================================
+
 % 1. Construct the alternative input database
-% =============================================================
+
 
 % Load filtered history / initial conditions
 d = dbload('results/kalm_his_cut.csv');
@@ -38,9 +38,9 @@ d = dboverlay(d,d_);
 h = df;
 
 
-%% ============================================================
+
 % 2. Alternative monetary-policy rule
-% ============================================================
+
 
 % Baseline:
 % g1 = 0.70
@@ -62,9 +62,9 @@ m_alt = solve(m_alt);
 m_alt = sstate(m_alt);
 
 
-%% ============================================================
+
 % 3. Simulate alternative
-% ============================================================
+
 
 % No SHK_RS intervention:
 % the alternative keeps the baseline forecast-period
@@ -73,16 +73,16 @@ m_alt = sstate(m_alt);
 s = simulate(m_alt,d,fcastrange,'anticipate',true);
 
 
-%% ============================================================
+
 % 4. Combine history and alternative forecast
-% ============================================================
+
 
 d = dbextend(d,s);
 
 
-%% ============================================================
+
 % 5. Merge baseline and alternative
-% ============================================================
+
 
 f = h & d;
 
@@ -91,9 +91,9 @@ f = h & d;
 dbsave('fcastdata_alt2.csv',f);
 
 
-%% ============================================================
+
 % 6. Diagnostics
-% ============================================================
+
 
 disp('----------------------------------------')
 disp('Alternative monetary policy experiment')
@@ -114,9 +114,9 @@ disp('Maximum absolute difference in inflation:')
 disp(max(abs(s.D4L_CPI(fcastrange)-h.D4L_CPI(fcastrange))))
 
 
-%% ============================================================
+
 % 7. Graphs and Tables
-% ============================================================
+
 
 Tablerng = startfcast-3:startfcast+7;
 Plotrng = startfcast-3:startfcast+11;
