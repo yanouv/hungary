@@ -1,6 +1,4 @@
-%% ============================================
 % LOSS FUNCTION
-% ============================================
 
 rng = startfcast:endfcast;
 
@@ -28,26 +26,17 @@ w_pi  = 0.7;
 w_gap = 0.3;
 w_drs = 0.1;
 
-%% ============================================
 % Inflation loss
-% ============================================
 
 Lpi_base = ((pi_base-tar_base)/sigma_pi).^2;
 Lpi_alt  = ((pi_alt-tar_alt)/sigma_pi).^2;
 
-%% ============================================
 % Output-gap loss
-% ============================================
 
 Lgap_base = (gap_base/sigma_gap).^2;
 Lgap_alt  = (gap_alt/sigma_gap).^2;
 
-%% ============================================
 % Interest-rate movement loss
-% ============================================
-
-% Include the last historical observation so that
-% 2023Q1 policy-rate change is calculated correctly.
 
 rs_base_ext = h.RS(startfcast-1:endfcast);
 rs_alt_ext  = d.RS(startfcast-1:endfcast);
@@ -58,9 +47,7 @@ drs_alt  = diff(rs_alt_ext);
 Ldrs_base = (drs_base/sigma_drs).^2;
 Ldrs_alt  = (drs_alt/sigma_drs).^2;
 
-%% ============================================
 % Discount factor
-% ============================================
 
 beta = 0.95;
 
@@ -70,27 +57,22 @@ T = length(rng);
 % Discount weights: beta^0, beta^1, ..., beta^(T-1)
 discount = beta.^(0:T-1)';
 
-%% ============================================
 % Total discounted loss
-% ============================================
 
 Lt_base = w_pi*Lpi_base + w_gap*Lgap_base + w_drs*Ldrs_base;
 
 Lt_alt = w_pi*Lpi_alt + w_gap*Lgap_alt + w_drs*Ldrs_alt;
 
 % Apply discount factor period by period
+
 L_base = sum(discount .* Lt_base);
 L_alt  = sum(discount .* Lt_alt);
 
-%% ============================================
 % Normalized alternative loss
-% ============================================
 
 L_alt_norm = L_alt/L_base;
 
-%% ============================================
 % Report
-% ============================================
 
 fprintf('\n');
 fprintf('----------------------------------------\n');
